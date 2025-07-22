@@ -1,2 +1,14 @@
 # Girly-Application
-An mobile application ptoject for my CV
+An mobile application project for my CV
+
+
+
+
+
+Backend:
+
+npm init -y
+npm install express
+npm i express@4.21.0
+npm i dotenv@16.5.0 cors@2.8.5 @neondatabase/serverless@1.0.0
+npm i -D nodemon
