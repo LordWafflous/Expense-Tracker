@@ -2,10 +2,14 @@ import express from "express"
 import dotenv from "dotenv"
 import { sql } from "./config/db.js";
 
+import transactionRoutes from './routes/transaction.route.js'
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+app.use(express.json());
 
 async function initDB () {
   try {
@@ -27,6 +31,8 @@ async function initDB () {
 app.get("/",(req,res) => {
   res.send("It is working");
 });
+
+app.use("/api/transactions", transactionRoutes);
 
 
 
