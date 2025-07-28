@@ -1,14 +1,20 @@
 import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import {useState} from 'react'
+import {styles} from '../../assets/styles/auth.styles'
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import {Image} from "expo-image" 
+import {Ionicons} from "@expo/vector-icons"
+import {COLORS} from '../../constants/colors'
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn()
   const router = useRouter()
 
-  const [emailAddress, setEmailAddress] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [emailAddress, setEmailAddress] = useState('')
+  const [password, setPassword] = useState('')
+   const [error, setError] = useState('') 
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
@@ -27,6 +33,7 @@ export default function Page() {
         await setActive({ session: signInAttempt.createdSessionId })
         router.replace('/')
       } else {
+        setError("Something went wrong.")
         // If the status isn't complete, check why. User might need to
         // complete further steps.
         console.error(JSON.stringify(signInAttempt, null, 2))
@@ -34,33 +41,68 @@ export default function Page() {
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
+      if (err.errors?.[0]?.code === "form_password_incorrect" || err.errors?.[0]?.code === "form_identifier_not_found") {
+        setError("Password is incorrect. Please try again.")
+      }
+      else if(err.errors?.[0]?.code === "form_param_format_invalid"){
+        setError("Format is incorrect. Please try again.")
+      }
+      else if(err.errors?.[0]?.code === "form_param_nil" || err.errors?.[0]?.code === "form_conditional_param_missing" ){
+        setError("Please fill everyhting.")
+      }
+      else{
+        setError("An error occurred. Please try again.")
+        console.error(JSON.stringify(err, null, 2))
+      }
     }
   }
 
   return (
-    <View>
-      <Text>Sign in</Text>
-      <TextInput
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Enter email"
-        onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-      />
-      <TextInput
-        value={password}
-        placeholder="Enter password"
-        secureTextEntry={true}
-        onChangeText={(password) => setPassword(password)}
-      />
-      <TouchableOpacity onPress={onSignInPress}>
-        <Text>Continue</Text>
-      </TouchableOpacity>
-      <View style={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
-        <Link href="/sign-up">
-          <Text>Sign up</Text>
+    <KeyboardAwareScrollView 
+      style={{flex:1}}
+      contentContainerStyle={{flexGrow:1}}
+      enableOnAndroid={true}
+      enableAutomaticScroll={true}
+      extraScrollHeight={30}
+    >
+      <View style={styles.container}>
+        <Image source={require("../../assets/images/revenue-i3.png")} style ={styles.illustration}/>
+        <Text style={styles.title}>Welcome Back</Text>
+
+        {error ? (
+          <View style ={styles.errorBox}>
+            <Ionicons name='alert-circle' size={20} color = {COLORS.expense} />
+              <Text style={styles.errorText}>{error}</Text>
+              <TouchableOpacity onPress={() => setError("Something went wrong")}>
+                <Ionicons name='close' size={20} color={COLORS.textLight}/>
+              </TouchableOpacity>
+          </View>
+        ) : null}
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="none"
+          value={emailAddress}
+          placeholder="Enter email"
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+        />
+        <TextInput
+        style={styles.input}
+          value={password}
+          placeholder="Enter password"
+          secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+        <TouchableOpacity style={styles.button} onPress={onSignInPress}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        
+        <Link href="/sign-up" asChild>
+          <TouchableOpacity style={styles.footerContainer}>
+            <Text style={styles.linkText}>Dont&apos;t have an account?</Text>
+          </TouchableOpacity>
         </Link>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   )
 }
