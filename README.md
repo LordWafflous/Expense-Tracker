@@ -8,6 +8,7 @@ Frontend:
 npx create-expo-app@latest .
 npm install @clerk/clerk-expo
 npm install expo-secure-store
+npm i react-native-keyboard-aware-scroll-view
 
 Backend:
 
