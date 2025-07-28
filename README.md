@@ -6,6 +6,8 @@ An mobile application project for my CV
 Frontend:
 
 npx create-expo-app@latest .
+npm install @clerk/clerk-expo
+npm install expo-secure-store
 
 Backend:
 
