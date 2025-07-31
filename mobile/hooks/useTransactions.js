@@ -15,6 +15,7 @@ export const useTransactions = (userId) => {
 
  //useCallBack is used for optimizing, it will memoize the function
  const fetchTransactions = useCallback( async() => {
+  
   try {
     const res = await fetch(`${API_URL}/transactions/${userId}`)
     const data = await res.json()
@@ -52,8 +53,10 @@ export const useTransactions = (userId) => {
  }, [fetchTransactions, fetchSummary, userId])
 
  const deleteTransaction = async (id) => {
+  console.log(id);
+
   try {
-    const res = await fetch(`${API_URL}/tranactions/${id}`, {method: "DELETE"});
+    const res = await fetch(`${API_URL}/transactions/${id}`, {method: "DELETE"});
     if (!res.ok) {
       throw new Error("Failed to delete tranaction");
     }

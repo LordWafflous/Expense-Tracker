@@ -10,6 +10,6 @@ const router = express.Router();
 router.get('/:userId',  authCheck, transactionGet);
 router.get('/summary/:userId',  authCheck, transactionSummary);
 router.post('/',  authCheck, transactionMake);
-router.delete('/:userId',  authCheck, transactionDelete);
+router.delete('/:id',  authCheck, transactionDelete);
 
 export default router;

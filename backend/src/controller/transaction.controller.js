@@ -41,14 +41,14 @@ export const transactionMake = async(req, res) => {
 
 export const transactionDelete = async(req, res) => {
   try {
-    const {userId} = req.params;
+    const {id} = req.params;
 
-    if (isNaN(parseInt(userId))) {
+    if (isNaN(parseInt(id))) {
       return res.status(404).json({message: "Invalid transaction ID"});
     }
 
     const result = await sql`
-      DELETE FROM transactions WHERE user_id = ${userId} RETURNING *
+      DELETE FROM transactions WHERE id = ${id} RETURNING *
     `
     if (result.length == 0) { //means we deleted nothing
       return res.status(404).json({message: "Error during deleting transaction."});
