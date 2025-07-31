@@ -51,12 +51,41 @@ const oceanTheme = {
   shadow: "#000000",
 };
 
+const mikuTheme = {
+  primary: "#00C9C8",       // Miku turquoise
+  background: "#E6FAF9",     // Light turquoise background
+  text: "#1A4D4A",           // Dark teal
+  border: "#B3EDE9",         // Soft border
+  white: "#FFFFFF",
+  textLight: "#69D6CF",      // Lighter text accent
+  expense: "#FF5C8D",        // Pinkish red
+  income: "#2ECC71",         // Soft green
+  card: "#FFFFFF",
+  shadow: "#000000",
+};
+
+const tetoTheme = {
+  primary: "#ff0045",      // Strong magenta-red (core Teto color)
+  background: "#FFF4F6",     // Very pale rose
+  text: "#3E0D23",           // Deep wine color for contrast
+  border: "#F8BBD0",         // Soft pink border
+  white: "#FFFFFF",
+  textLight: "#E91E63",      // Vivid pink highlight
+  expense: "#B71C1C",        // Deep crimson red
+  income: "#43A047",         // Strong green for balance
+  card: "#FFFFFF",
+  shadow: "#000000",
+};
+
+
 export const THEMES = {
   coffee: coffeeTheme,
   forest: forestTheme,
   purple: purpleTheme,
   ocean: oceanTheme,
+  miku: mikuTheme,
+  teto: tetoTheme,
 };
 
 // 👇 change this to switch theme
-export const COLORS = THEMES.ocean;
+export const COLORS = THEMES.teto;

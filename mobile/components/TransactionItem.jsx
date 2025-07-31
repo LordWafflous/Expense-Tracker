@@ -3,7 +3,6 @@ import {Ionicons} from "@expo/vector-icons"
 import {styles} from '../assets/styles/home.styles'
 import { COLORS } from '../constants/colors'
 import {formatDate} from '../lib/utils'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 const CATEGORY_ICONS = {
   'Food & Drinks': 'fast-food',
