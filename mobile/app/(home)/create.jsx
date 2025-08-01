@@ -1,0 +1,141 @@
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
+import { Link, useRouter } from 'expo-router'
+import { Text, View, TouchableOpacity, FlatList, Alert, RefreshControl } from 'react-native'
+import { SignOutButton } from '@/components/SignOutButton'
+import { useTransactions } from '../../hooks/useTransactions'
+import { useEffect, useState } from 'react'
+import PageLoader from '../../components/PageLoader'
+import {Image} from "expo-image" 
+import {Ionicons} from "@expo/vector-icons"
+import {styles} from '../../assets/styles/create.styles'
+import BalanceCard from '../../components/BalanceCard'
+import TransactionItem from '../../components/TransactionItem'
+import NoTransactionsFound from '../../components/NoTransactionsFound'
+import { API_URL } from '../../constants/api'
+import { COLORS } from '../../constants/colors'
+
+const CATEGPRIES = [
+  {id: "food", name: "Food & Drinks", icon:"fast-food"},
+  {id: "shopping", name: "Shopping", icon:"cart"},
+  {id: "transportation", name: "Transportation", icon:"car"},
+  {id: "entertainment", name: "Entertainment", icon:"film"},
+  {id: "bills", name: "Bills", icon:"receipt"},
+  {id: "income", name: "Income", icon:"cash"},
+  {id: "bs", name: "Invesment :3", icon:"heart"},
+  {id: "other", name: "Other", icon:"ellipsis-horizontal"},
+];
+
+const create = () => {
+  const router = useRouter();
+  const{user} = useUser();
+
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isExpense, setIsExpense] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreate = async() => {
+    if(!title.trim())
+    {
+      return Alert.alert("Error", "Please enter a transaction title");
+    }
+
+    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+      Alert.alert("Error", "Please enter a valid amount");
+      return;
+    }
+    if (!selectedCategory) {
+      return Alert.alert("Error", "Please select a category");
+    }
+
+    try {
+      setIsLoading(true);
+      const formattedAmount = isExpense
+      ? -Math.abs(parseFloat(amount))
+      : Math.abs(parseFloat(amount));
+
+      const res = await fetch(`${API_URL}/transactions`, {
+        method: "POST",
+        headers: {
+          "Content-Type":"application.json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          title,
+          amount: formattedAmount,
+          category: selectedCategory,
+        }),
+      })
+
+      if (!res.data) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to create transaction");
+      }
+      Alert.alert("Success", "Transaction created succesfully");
+      router.back();
+    } catch (error) {
+      Alert.alert("Error",error.message || "Failed to create transaction")
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}> 
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name='arrow-back' size={24} color={COLORS.text}/>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>New Transaction</Text>
+        <TouchableOpacity
+          style={[styles.saveButtonContainer, isLoading && styles.saveButtonDisabled]}
+          onPress={handleCreate}
+          disabled={isLoading}
+        >
+          <Text style={styles.saveButton}>{isLoading ? 'Saving...' : 'Save'}</Text>
+          {!isLoading && <Ionicons name='checkmark' size={18} color={COLORS.primary}/>}
+        </TouchableOpacity>
+
+      </View>
+
+      <View style={styles.card}>
+        <View style={styles.typeSelector}>
+          <TouchableOpacity
+            style={[styles.typeButton, isExpense && styles.typeButtonActive]}
+            onPress={() => setIsExpense(true)}
+          >
+            <Ionicons
+              name='arrow-down-circle'
+              size={22}
+              color={isExpense ? COLORS.white : COLORS.expense}
+              style={styles.typeIcon}
+            />
+          <Text style={[styles.typeButtonText, isExpense && styles.typeButtonTextActive]}>
+            Expense
+          </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.typeButton, !isExpense && styles.typeButtonActive]}
+            onPress={() => setIsExpense(false)}
+          >
+            <Ionicons
+              name='arrow-up-circle'
+              size={22}
+              color={!isExpense ? COLORS.white : COLORS.income}
+              style={styles.typeIcon}
+            />
+
+            <Text style={[styles.typeButtonText, !isExpense && styles.typeButtonTextActive]}>
+              Income
+            </Text>
+
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+export default create

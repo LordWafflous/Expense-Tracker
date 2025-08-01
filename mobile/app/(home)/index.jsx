@@ -1,5 +1,5 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import { Link, useRouter } from 'expo-router'
+import { useUser } from '@clerk/clerk-expo'
+import { useRouter } from 'expo-router'
 import { Text, View, TouchableOpacity, FlatList, Alert, RefreshControl } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '../../hooks/useTransactions'
