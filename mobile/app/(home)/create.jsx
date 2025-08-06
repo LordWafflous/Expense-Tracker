@@ -159,6 +159,7 @@ const create = () => {
             placeholderTextColor={COLORS.textLight}
             value={title}
             onChangeText={setTitle}
+            
           />
         </View>
 
