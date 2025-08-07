@@ -159,10 +159,17 @@ const create = () => {
             placeholderTextColor={COLORS.textLight}
             value={title}
             onChangeText={setTitle}
-            
+
           />
         </View>
 
+        <Text style={styles.sectionTitle}>
+          <Ionicons
+            size={16}
+            name='pricetag-outline'
+            color={COLORS.text}
+          />
+        </Text>
 
       </View>
     </View>
