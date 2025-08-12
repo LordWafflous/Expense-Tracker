@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
-import { Text, View, TouchableOpacity, FlatList, Alert, RefreshControl, TextInput } from 'react-native'
+import { Text, View, TouchableOpacity, FlatList, Alert, RefreshControl, TextInput, ActivityIndicator } from 'react-native'
 import { SignOutButton } from '@/components/SignOutButton'
 import { useTransactions } from '../../hooks/useTransactions'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ import NoTransactionsFound from '../../components/NoTransactionsFound'
 import { API_URL } from '../../constants/api'
 import { COLORS } from '../../constants/colors'
 
-const CATEGPRIES = [
+const CATEGORIES = [
   {id: "food", name: "Food & Drinks", icon:"fast-food"},
   {id: "shopping", name: "Shopping", icon:"cart"},
   {id: "transportation", name: "Transportation", icon:"car"},
@@ -25,6 +25,7 @@ const CATEGPRIES = [
   {id: "other", name: "Other", icon:"ellipsis-horizontal"},
 ];
 
+
 const create = () => {
   const router = useRouter();
   const{user} = useUser();
@@ -34,6 +35,8 @@ const create = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isExpense, setIsExpense] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log(user.id);
 
   const handleCreate = async() => {
     if(!title.trim())
@@ -58,17 +61,17 @@ const create = () => {
       const res = await fetch(`${API_URL}/transactions`, {
         method: "POST",
         headers: {
-          "Content-Type":"application.json",
+          "Content-Type":"application/json",
         },
         body: JSON.stringify({
-          userId: user.id,
+          user_id: user.id,
           title,
           amount: formattedAmount,
           category: selectedCategory,
         }),
       })
 
-      if (!res.data) {
+      if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "Failed to create transaction");
       }
@@ -169,11 +172,49 @@ const create = () => {
             name='pricetag-outline'
             color={COLORS.text}
           />
+          Category
         </Text>
 
+        <View style={styles.categoryGrid}>
+          {CATEGORIES.map(category=>(
+            <TouchableOpacity
+              key={category.id}
+              style={[
+                styles.categoryButton,
+                selectedCategory === category.name && styles.categoryButtonActive,
+              ]}
+              onPress={() => setSelectedCategory(category.name)}
+            >
+              <Ionicons 
+                name={category.icon}
+                size={20}
+                color={selectedCategory === category.name ? COLORS.white : COLORS.text}
+                style={styles.categoryIcon}
+              />
 
+              <Text
+                style={[
+                  styles.categoryButtonText,
+                  selectedCategory === category.name && styles.categoryButtonTextActive,
+                ]}
+              >
+                {category.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
       </View>
+
+      {isLoading && (
+        <View>
+          <ActivityIndicator
+            size="large"
+            color={COLORS.primary}
+          />
+        </View>
+      )}
+
     </View>
   )
 }

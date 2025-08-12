@@ -47,7 +47,7 @@ export default function Page() {
           {/*Left*/}
           <View style={styles.headerLeft}>
             <Image
-              source = {require("../../assets/images/logo.png")}
+              source = {require("../../assets/images/teto.gif")}
               style={styles.headerLogo}
               contentFit='contain'
             />
