@@ -12,7 +12,10 @@ export const styles = StyleSheet.create({
   illustration: {
     width: 300,
     height: 310,
-    contentFit: "contain",
+    marginHorizontal: 30,
+    borderWidth: 5,
+    borderColor: "#3E0D23",
+    borderRadius: 30,
   },
   title: {
     fontSize: 32,

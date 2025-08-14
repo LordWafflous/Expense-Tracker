@@ -66,7 +66,11 @@ export default function Page() {
       extraScrollHeight={30}
     >
       <View style={styles.container}>
-        <Image source={require("../../assets/images/revenue-i3.png")} style ={styles.illustration}/>
+        <Image source={require("../../assets/images/kasane-teto-teto-kasane.gif")} 
+          style ={styles.illustration}
+          contentFit="contain"
+
+        />
         <Text style={styles.title}>Welcome Back</Text>
 
         {error ? (
