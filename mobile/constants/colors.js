@@ -65,17 +65,18 @@ const mikuTheme = {
 };
 
 const tetoTheme = {
-  primary: "#ff0045",      // Strong magenta-red (core Teto color)
-  background: "#FFF4F6",     // Very pale rose
-  text: "#3E0D23",           // Deep wine color for contrast
-  border: "#F8BBD0",         // Soft pink border
+  primary: "#ff0045",      
+  background: "#FFF4F6",    
+  text: "#3E0D23",           
+  border: "#F8BBD0",       
   white: "#FFFFFF",
-  textLight: "#E91E63",      // Vivid pink highlight
-  expense: "#B71C1C",        // Deep crimson red
-  income: "#43A047",         // Strong green for balance
+  textLight: "#E91E63",     
+  expense: "#B71C1C",        
+  income: "#43A047",         
   card: "#FFFFFF",
   shadow: "#000000",
 };
+
 
 
 export const THEMES = {
@@ -87,5 +88,4 @@ export const THEMES = {
   teto: tetoTheme,
 };
 
-// 👇 change this to switch theme
 export const COLORS = THEMES.teto;
