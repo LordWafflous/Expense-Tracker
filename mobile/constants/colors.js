@@ -77,6 +77,7 @@ const tetoTheme = {
   shadow: "#000000",
 };
 
+
 export const THEMES = {
   coffee: coffeeTheme,
   forest: forestTheme,
